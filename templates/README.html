@@ -1,0 +1,1339 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+{% block header %}
+<head>
+    <meta charset="UTF-8">
+    <title>Boenerho project: {{ title }}</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+    <link rel="stylesheet" href="{% static 'css/asciidoc.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
+</head>
+<body class="article11">
+<h1>{{title}}</h1>
+{% endblock %}
+{% block content %}
+<div id="header">
+<div class="details">
+<span id="author" class="author">Kirill Strelkovskij</span><br>
+<span id="email" class="email"><a href="mailto:kstr88@mail.ru">kstr88@mail.ru</a></span><br>
+<span id="revnumber">version 3.0,</span>
+<span id="revdate">July 9, 2022</span>
+<br><span id="revremark">AsciiDoc</span>
+</div>
+<div id="toc" class="toc">
+<div id="toctitle">Оглавление</div>
+<ul class="sectlevel1">
+<li><a href="#_инсталляция">1. Инсталляция</a>
+<ul class="sectlevel2">
+<li><a href="#_запуск_django">1.1. Запуск <em>Django</em></a></li>
+<li><a href="#_запуск_контейнера_docker">1.2. Запуск контейнера <em>Docker</em></a></li>
+</ul>
+</li>
+<li><a href="#_конфигурация">2. Конфигурация</a>
+<ul class="sectlevel2">
+<li><a href="#_структура_проекта">2.1. Структура проекта</a></li>
+<li><a href="#_настройки_settings">2.2. Настройки <em>settings</em></a></li>
+</ul>
+</li>
+<li><a href="#_модуль_решение_квадратных_уравнений_solving_quadratic_equations">3. Модуль решение квадратных уравнений (<em>Solving Quadratic Equations</em>)</a>
+<ul class="sectlevel2">
+<li><a href="#_структура">3.1. Структура</a></li>
+<li><a href="#_работа_с_модулем">3.2. Работа с модулем</a></li>
+<li><a href="#_принцип_работы_модуля">3.3. Принцип работы модуля</a></li>
+<li><a href="#_описание_элементов">3.4. Описание элементов</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Проект содержит сервис для расчёта корней квадратного уравнения и сервис для угадывания цвета</p>
+</div>
+<div class="paragraph">
+<p>Проект реализован на <a href="https://docs.python.org/3.8/"><em>python-3.8</em></a> с возможностью запуска в контейнере <a href="https://www.docker.com/"><em>Docker</em></a>.</p>
+</div>
+<div class="paragraph">
+<p>База данных проекта построена на <a href="https://www.sqlite.org/"><em>SQLite</em></a>.</p>
+</div>
+<div class="paragraph">
+<p>Сервисы разработаны без организации уровней доступа за исключением панели администратора.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_инсталляция">1. Инсталляция</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Процесс инсталляции описан для <em>*nix</em>-системы в оболочке <em>bash</em>.</p>
+</div>
+<div class="sect2">
+<h3 id="_запуск_django">1.1. Запуск <em>Django</em></h3>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Для запуска проекта средствами фреймворка необходимо наличие <a href="https://python.org"><em>python</em></a> не ниже версии <a href="https://docs.python.org/3.8/"><em>3.8</em></a>
+</td>
+</tr>
+</table>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Клонируйте проект на локальную машину:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git clone ...</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Перейдите в каталог с проектом:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ cd boenergo_project</code></pre>
+</div>
+</div>
+</li>
+<li>
+    <p>Организуйте виртуальное окружение:</p>
+    <div class="listingblock">
+        <div class="content">
+            <pre class="highlight"><code class="language-bash" data-lang="bash">$ python3 -m venv .venv</code></pre>
+        </div>
+    </div>
+    <div class="listingblock">
+    <div class="content">
+        <pre class="highlight"><code class="language-bash" data-lang="bash">$ source .venv/bin/activate(.venv) $</code>
+        </pre>
+    </div>
+    </div>
+    <div class="admonitionblock tip">
+        <table>
+            <tr>
+                <td class="icon">
+                    <i class="fa icon-tip" title="Tip"></i>
+                </td>
+                <td class="content">
+                    Для выхода из виртуального окружения введите: <code><em>deactivate</em></code>
+                </td>
+            </tr>
+        </table>
+    </div>
+</li>
+<li>
+<p>Установите зависимости:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">(.venv) $pip install -r requirements.txt</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Добавьте переменные окружения:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">(.venv) $echo "SECRET_KEY=RAnDoM_SeCrET_KeY_313_323_463
+DEBUG=True
+ALLOWED_HOSTS=127.0.0.1,localhost" &gt;&gt; .env</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Проведите миграции:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">(.venv) $ python manage.py migrate</code></pre>
+</div>
+</div>
+<div id="createsuperuser_man" class="ulist">
+<ul>
+<li>
+<p>При необходимости создания учётной записи суперпользователя:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">(.venv) $ python manage.py createsuperuser
+Имя пользователя: {root} # введите имя пользователя
+Адрес электронной почты: # введите адрес электронной почты (можно пропустить)
+Password: # введите пароль (символы не отображаются)
+Password (again): # повторите пароль (символы не отображаются)
+# ошибки валидации пароля
+Введённый пароль слишком короткий. Он должен содержать как минимум 8 символов.
+Введённый пароль слишком широко распространён.
+Введённый пароль состоит только из цифр.
+Bypass password validation and create user anyway? [y/N]: {y} # разрешить оставить простой пароль
+Superuser created successfully. # сообщение об успешном выполнении команды</code></pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Запустите сервер:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">(.venv) $ python manage.py runserver localhost:9000</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>После правильного выполнения всех шагов должен появиться вывод:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">Watching for file changes with StatReloader
+Performing system checks...
+
+System check identified no issues (0 silenced).
+{MONTH} {DAY}, {DATE} - {TIME}
+Django version {DJANGO_VERSION}, using settings 'config.settings'
+Starting development server at http://localhost:9000/
+Quit the server with CONTROL-C.</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Для проверки можно перейти в браузере на страницу <em><a href="http://localhost:9000/admin" class="bare">http://localhost:9000/admin</a></em>.
+Если отображается форма авторизации и получается войти под учётной записью <a href="#createsuperuser_man">суперпользователя</a> - инсталляция завершена.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_запуск_контейнера_docker">1.2. Запуск контейнера <em>Docker</em></h3>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Для запуска контейнера потребуется установленное ПО <a href="https://www.docker.com/"><em>Docker</em></a>
+</td>
+</tr>
+</table>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Клонируйте проект на локальную машину:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ git clone ...</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Перейдите в каталог с проектом:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ cd boenergo_project</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Выполните команду:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ docker-compose up -d</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Для проверки можно перейти в браузере на страницу <em><a href="http://localhost:9000/admin" class="bare">http://localhost:9000/admin</a></em>.
+Если отображается форма авторизации и получается войти под учётной записью <a href="#createsuperuser_man">суперпользователя</a> - инсталляция завершена.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_конфигурация">2. Конфигурация</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_структура_проекта">2.1. Структура проекта</h3>
+<div class="listingblock">
+<div class="content">
+<pre>project_root
+├── config
+│   ├── settings
+│   ├── db.sqlite3
+│   └── urls.py
+├── docs
+├── locale
+├── modules
+│   ├── color_guessing_service
+│   └── solving_quadratic_equations
+├── manage.py
+├── README.adoc
+└── requirements.txt</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Каталог <em>config</em> - содержит настройки проекта</p>
+<div class="ulist">
+<ul>
+<li>
+<p><em>settings</em> - общие настройки <em>settings</em></p>
+</li>
+<li>
+<p><em>db.sqlite3</em> - база данныйх <em>SQLite</em></p>
+</li>
+<li>
+<p><em>urls.py</em> - корень маршрутов <em>URL</em></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Каталог <em>docs</em> - содержит дополнительные файлы документации</p>
+</li>
+<li>
+<p>Каталог <em>locale</em> - содержит перевод для локализации <em>en/ru</em></p>
+</li>
+<li>
+<p>Каталог modules - содержит приложения проекта</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Каталог <em>color_guessing_service</em> - приложение отгадывания цвета</p>
+</li>
+<li>
+<p>Каталог <em>solving_quadratic_equations</em> - приложение нахождения решений квадратных уравнений</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><em>manage.py</em> - менеджер <em>Django</em></p>
+</li>
+<li>
+<p><em>README.adoc</em> - данное руководство в формате <em>AsciiDoc</em></p>
+</li>
+<li>
+<p><em>requirements.txt</em> - список зависимостей проекта</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_настройки_settings">2.2. Настройки <em>settings</em></h3>
+<div class="listingblock">
+<div class="content">
+<pre>├── settings
+│   ├── apps.py
+│   ├── auto_field.py
+│   ├── base.py
+│   ├── database.py
+│   ├── files.py
+│   ├── internationalization.py
+│   ├── middleware.py
+│   ├── password_validation.py
+│   ├── templates.py
+│   ├── url.py
+│   └── wsgi.py</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em>apps</em> - настройки приложений</p>
+</li>
+<li>
+<p><em>auto_field</em> - настройка типа первичного ключа</p>
+</li>
+<li>
+<p><em>base</em> - базовые настройки</p>
+</li>
+<li>
+<p><em>database</em> - настройки базы данных</p>
+</li>
+<li>
+<p><em>files</em> - настройки работы с файлами</p>
+</li>
+<li>
+<p><em>internationalization</em> - настройки интернационализации</p>
+</li>
+<li>
+<p><em>middleware</em> - настройки промежуточных обработчиков</p>
+</li>
+<li>
+<p><em>password_validation</em> - настройки проверки паролей</p>
+</li>
+<li>
+<p><em>templates</em> - настройки шаблонов</p>
+</li>
+<li>
+<p><em>url</em> - настройки маршрутов</p>
+</li>
+<li>
+<p><em>wsgi</em> - настройки <em>wsgi</em></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_модуль_решение_квадратных_уравнений_solving_quadratic_equations">3. Модуль решение квадратных уравнений (<em>Solving Quadratic Equations</em>)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Модуль позволяет найти решение квадратного уравнения на основе коэффициентов <code><em>a</em></code>, <code><em>b</em></code>, <code><em>c</em></code>.</p>
+</div>
+<div class="sect2">
+<h3 id="_структура">3.1. Структура</h3>
+<div class="listingblock">
+<div class="content">
+<pre>│└── solving_quadratic_equations
+│    ├── api
+│    │    ├── quadratic_equation_solving_api.py
+│    │    ├── forms
+│    │    │└── quadratic_equation_solving_form.py
+│    │    ├── serializers
+│    │    │└── quadratic_equation_solving_serializer.py
+│    │    └── views.py
+│    ├── enums
+│    │    └── coefficient_named_tuple.py
+│    ├── exceptions
+│    │    └── coefficient_value_error.py
+│    ├── migrations
+│    ├── services
+│    │    └── quadratic_equation_solving_service.py
+│    ├── templates
+│    │    └── find_solutions.html
+│    ├── tests
+│    │    ├── http-client.env.json
+│    │    ├── test_api.http
+│    │    └── tests.py
+│    ├── admin.py
+│    ├── apps.py
+│    ├── models.py
+│    └── urls.py</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em>api</em> - каталог с эндпоинтами</p>
+<div class="ulist">
+<ul>
+<li>
+<p><em>serializers</em> - каталог с сериализаторами</p>
+<div class="ulist">
+<ul>
+<li>
+<p><em>quadratic_equation_solving_serializer.py</em> - сериализатор</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><em>quadratic_equation_solving_api.py</em> - <em>API</em> и представление</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><em>enums</em> - перечни</p>
+<div class="ulist">
+<ul>
+<li>
+<p><em>coefficient_named_tuple.py</em> - <em>namedtuple</em>-перечень коэффициентов</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><em>exceptions</em> - кастомные исключения</p>
+<div class="ulist">
+<ul>
+<li>
+<p><em>coefficient_value_error.py</em> - исключения по значениям коэффициентов</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><em>migrations</em> - миграции базы данных</p>
+</li>
+<li>
+<p><em>services</em> - службы / бизнес-логика</p>
+<div class="ulist">
+<ul>
+<li>
+<p><em>quadratic_equation_solving_service.py</em> - служба нахождения решения уравнения</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><em>templates</em> - каталог с шаблонами приложения</p>
+<div class="ulist">
+<ul>
+<li>
+<p><em>find_solutions.html</em> - шаблон для представления</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><em>tests</em> - тесты</p>
+<div class="ulist">
+<ul>
+<li>
+<p><em>test_api.http</em> - <em>HTTP</em>-запросы</p>
+</li>
+<li>
+<p><em>tests.py</em> - тестирование</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><em>admin.py</em> - панель администратора</p>
+</li>
+<li>
+<p><em>apps.py</em> - конфигурация модуля</p>
+</li>
+<li>
+<p><em>models.py</em> - модели</p>
+</li>
+<li>
+<p><em>urls.py</em> - маршруты</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_работа_с_модулем">3.2. Работа с модулем</h3>
+<div class="sect3">
+<h4 id="_работа_через_интерфейс">Работа через интерфейс</h4>
+<div class="paragraph">
+<p>Для работы через интерфейс необходимо перейти по адресу:</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="paragraph">
+<p><a href="http://localhost:9000/solving_quadratic_equations/" class="bare">http://localhost:9000/solving_quadratic_equations/</a></p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Страница имеет следующий вид:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="{% static 'images/' %}img_1.png" alt="Изображение" width="600">
+</div>
+<div class="title">Рисунок 1. Интерфейс пользователя</div>
+</div>
+<div class="paragraph">
+<p>Для нахождения решения необходимо заполнить поля коэффициентов и нажать <b class="button">Найти решение</b></p>
+</div>
+<div class="paragraph">
+<p>Для сброса значений нажмите <b class="button">Сброс</b></p>
+</div>
+<div class="paragraph">
+<p>При возникновении ошибки над <b class="button">Найти решение</b> появится информационное сообщение.</p>
+</div>
+<div class="paragraph">
+<p>При нахождении ответа в верхней части будут отображены результаты:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="{% static 'images/' %}img_2.png" alt="Изображение" width="600">
+</div>
+<div class="title">Рисунок 2. Результаты нахождения решения</div>
+</div>
+<div class="paragraph">
+<p>При коэффициенте <code><em>a</em></code> = 0 будет произведён поиск решения линейного уравнения.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+При отсутствии коэффициентов <code><em>a</em></code> и <code><em>b</em></code> возникнет исключение, поскольку отсутствие данных коэффициентов предполагает отсутствие <code>x</code>.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+В рамках данного проекта защита от часты запросов (<em>CAPTCHA</em>) не была предусмотрена.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_использование_api">Использование <em>API</em></h4>
+<div class="paragraph">
+<p>Сервис предполагает возможность поиска решения уравнения через <em>API</em>.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Для упрощения вся обработка происходит через <em>GET</em>-запрос.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Получить расчёт по <em>API</em> можно двумя способами:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Передача параметров через адресную строку</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-http" data-lang="http">GET http://localhost:9000/solving_quadratic_equations/api/?a=1&amp;b=2&amp;c=1</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Передача параметров через тело запроса</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-http" data-lang="http">GET http://localhost:9000/solving_quadratic_equations/api/
+
+{
+    "a": 1,
+    "b": 2,
+    "c": 1
+}</code></pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Ответ на запрос ввозвращается в формате <em>JSON</em>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-JSON" data-lang="JSON">{
+  "a": 1.0,
+  "b": 2.0,
+  "c": 1.0,
+  "discriminant": 0.0,
+  "result": -1.0
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>В случае возникновения ошибок с коэффициентами запрос вернёт 400 статус и текст ошибки:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-http" data-lang="http">[
+  "Базовая ошибка значения коэффициента ('a', 'b'): (0.0, 0.0)"
+]
+
+Response code: 400 (Bad Request)</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_принцип_работы_модуля">3.3. Принцип работы модуля</h3>
+<div class="paragraph">
+<p>Для демонстрации различных подходов в модуле были реализованы следующие механизмы:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Модель <a href="#QuadraticEquationSolving_link"><em>QuadraticEquationSolving</em></a> - данные о коэффициентах и найденных значениях</p>
+</li>
+<li>
+<p>Панель администратора <a href="#QuadraticEquationSolvingAdmin_link"><em>QuadraticEquationSolvingAdmin</em></a> - для работы с моделью</p>
+</li>
+<li>
+<p><em>HTTP</em>-запросы <a href="#test_api_link"><em>test_api.http</em></a> - для проверки работы с <em>API</em></p>
+</li>
+<li>
+<p>Шаблон <a href="#find_solutions_link"><em>find_solutions.html</em></a> - для создания интерфейса пользователя</p>
+</li>
+<li>
+<p>Сервис <a href="#QuadraticEquationSolvingService_link"><em>QuadraticEquationSolvingService</em></a> - для валидации коэффициентов, отслеживания исключительных ситуаций, нахождения решений и сохранения данных в базу</p>
+</li>
+<li>
+<p>Исключения <a href="#CoefficientValueError_link"><em>CoefficientValueError</em></a>- для локализации исключений</p>
+</li>
+<li>
+<p>Именованный кортеж <a href="#Coefficient_link"><em>Coefficient</em></a>- для работы с коэффициентами</p>
+</li>
+<li>
+<p>Представление <em>Django</em> <a href="#QuadraticEquationSolvingView_link"><em>QuadraticEquationSolvingView</em></a> -  для формирования интерфейса</p>
+</li>
+<li>
+<p>Набор представлений <em>Django</em> <em>REST</em> <em>Framework</em> <a href="#QuadraticEquationSolvingAPI_link"><em>QuadraticEquationSolvingAPI</em></a> - для работы <em>API</em></p>
+</li>
+<li>
+<p>Сериализатор <a href="#QuadraticEquationSolvingSerializer_link"><em>QuadraticEquationSolvingSerializer</em></a> - для формирования API</p>
+</li>
+<li>
+<p>Форма <a href="#QuadraticEquationSolvingForm_link"><em>QuadraticEquationSolvingForm</em></a> - для формирования интерфейса пользователя</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Модель в данном сервисе используется в качестве <strong>кэша</strong> - при каждом новом запросе проверяется наличие уникальной связки ключей коэффициентов в модели, если объект модели существует - возвращается результат из модели, иначе возвращается результат расчёта. Данный результат также сохраняется в базе.</p>
+</div>
+<div class="paragraph">
+<p>Таким образом работа сервиса заключается ещё и в накоплении данных.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_описание_элементов">3.4. Описание элементов</h3>
+<div class="sect3">
+<h4 id="QuadraticEquationSolving_link">Модель <em>QuadraticEquationSolving</em></h4>
+<div class="paragraph">
+<p>Строковое значение - <code>{a} * x^2 + {b} * x + {c} = 0 (Discriminant: {discriminant}; X1: {solution_1}; X2: {solution_2})</code></p>
+</div>
+<div class="paragraph">
+<p>Название модели - Решение квадратного уравнения (Решения квадратных уравнений)</p>
+</div>
+<div class="paragraph">
+<p>Композитный ключ - (<code><em>a</em></code>, <code><em>b</em></code>, <code><em>c</em></code>)</p>
+</div>
+<div class="paragraph">
+<p>Сортировка по умолчанию:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><code><em>solution_1</em></code></p>
+</li>
+<li>
+<p><code><em>solution_2</em></code></p>
+</li>
+</ol>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Таблица 1. Поля модели <em>QuadraticEquationSolving</em></caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Поле</th>
+<th class="tableblock halign-left valign-top">Тип</th>
+<th class="tableblock halign-left valign-top">Описание</th>
+<th class="tableblock halign-left valign-top">Свойства</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>a</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>FloatField</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Коэффициент '<em>a</em>'</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>null=True</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>b</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>FloatField</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Коэффициент '<em>b</em>'</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>null=True</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>c</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>FloatField</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Коэффициент '<em>c</em>'</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>null=True</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>discriminant</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>FloatField</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Дискриминант</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>null=True, default=None</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>solution_1</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>FloatField</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Первый корень уравнения <code><em>X1</em></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>null=True, default=None</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>solution_2</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>FloatField</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Второй корень уравнения <code><em>X2</em></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>null=True, default=None</em></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="QuadraticEquationSolvingAdmin_link">Панель администратора <em>QuadraticEquationSolvingAdmin</em></h4>
+<div class="paragraph">
+<p>Панель администратора для модели QuadraticEquationSolving</p>
+</div>
+<div class="paragraph">
+<p>Отображаемые значения:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code><em>a</em></code></p>
+</li>
+<li>
+<p><code><em>b</em></code></p>
+</li>
+<li>
+<p><code><em>c</em></code></p>
+</li>
+<li>
+<p><code><em>discriminant</em></code></p>
+</li>
+<li>
+<p><code><em>solution_1</em></code></p>
+</li>
+<li>
+<p><code><em>solution_2</em></code></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="test_api_link"><em>HTTP</em>-запросы <em>test_api.http</em></h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Передача параметров через адресную строку</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-http" data-lang="http">GET http://localhost:9000/solving_quadratic_equations/api/?a=1&amp;b=2&amp;c=1</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Передача параметров через тело запроса</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-http" data-lang="http">GET http://localhost:9000/solving_quadratic_equations/api/
+
+{
+    "a": 1,
+    "b": 2,
+    "c": 1
+}</code></pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Ответ на запрос ввозвращается в формате <em>JSON</em>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-JSON" data-lang="JSON">{
+  "a": 1.0,
+  "b": 2.0,
+  "c": 1.0,
+  "discriminant": 0.0,
+  "result": -1.0
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>В случае возникновения ошибок с коэффициентами запрос вернёт 400 статус и текст ошибки:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-http" data-lang="http">[
+  "Базовая ошибка значения коэффициента ('a', 'b'): (0.0, 0.0)"
+]
+
+Response code: 400 (Bad Request)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="find_solutions_link">Шаблон <em>find_solutions.html</em></h4>
+<div class="paragraph">
+<p>Стандартный <em>HTML</em>-документ с применением <em>CSS</em>-стилей.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Таблица 2. Переменные шаблона</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Название</th>
+<th class="tableblock halign-left valign-top">Тип</th>
+<th class="tableblock halign-left valign-top">Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>header</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>str</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Заголовок страницы</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>form</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>django.forms</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Форма для ввода коэффициентов</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>linear</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>bool</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Флаг для отображения результатов по расчёту линейного уравнения (линейное уравнение - отсутствует дискриминант, коэффициент <code><em>a</em></code>, второй корень, присутствует первый корень)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>discriminant</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>float</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Дискриминант</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>non_solution</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>bool</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Флаг отражающий отсутствие результата (отсутствует первый корень, второй корень, присутствует дискриминант)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>one_solution</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>bool</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Флаг отражающий одно решение (отсутствует второй корень, присутствует дискриминант, первый корень)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>two_solutions</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>bool</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Флаг отражающий два решения (присутствует первый корень, второй корень)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>solution_1</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>float</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Первый корень</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>solution_2</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>float</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Второй корень</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>error_message</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>str</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Сообщение об ошибке</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="QuadraticEquationSolvingService_link">Сервис <em>QuadraticEquationSolvingService</em></h4>
+<div class="paragraph">
+<p>Служба: Решение квадратного уравнения</p>
+</div>
+<div class="paragraph">
+<p>Методы:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em>calc_equation</em> - решение уравнения</p>
+<div class="listingblock">
+<div class="content">
+<pre>(raw_coefficients: Dict) -&gt; Tuple[float, Union[Tuple, float, None]]</pre>
+</div>
+</div>
+</li>
+<li>
+<p><em>float_formatting_coefficient</em> - преобразование коэффициентов к вещественным числам и упаковка в <em>namedtuple</em></p>
+<div class="listingblock">
+<div class="content">
+<pre>(a: str, b: str, c: str) -&gt; Coefficient</pre>
+</div>
+</div>
+</li>
+<li>
+<p><em>get_or_create_solving</em> - выборка данных из базы или добавление данных в базу</p>
+<div class="listingblock">
+<div class="content">
+<pre>(cleaned_coefficient: Coefficient) -&gt; QuadraticEquationSolving</pre>
+</div>
+</div>
+</li>
+<li>
+<p><em>validate_coefficient</em></p>
+<div class="sidebarblock">
+<div class="content">
+<div class="paragraph">
+<p>Валидация данных</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>коэффициенты <code><em>a</em></code> и <code><em>b</em></code> присутствуют и не равны нулю;</p>
+</li>
+<li>
+<p>коэффициенты не равны бесконечности;</p>
+</li>
+<li>
+<p>коэффициенты являются вещественными числами;</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>(raw_coefficients: Dict) -&gt; None</pre>
+</div>
+</div>
+</li>
+<li>
+<p><em>_calc_linear_equation</em> - решение линейного уравнения</p>
+<div class="listingblock">
+<div class="content">
+<pre>(solution: QuadraticEquationSolving) -&gt; float</pre>
+</div>
+</div>
+</li>
+<li>
+<p><em>_checking_real_number</em> - проверка значения на принадлежность к вещественным числам (за исключением бесконечностей)</p>
+<div class="listingblock">
+<div class="content">
+<pre>(value: Any) -&gt; bool</pre>
+</div>
+</div>
+</li>
+<li>
+<p><em>_find_discriminant</em> - поиск дискриминанта</p>
+<div class="listingblock">
+<div class="content">
+<pre>(solution: QuadraticEquationSolving) -&gt; float</pre>
+</div>
+</div>
+</li>
+<li>
+<p><em>_find_first_solution</em> - поиск первого корня уравнения</p>
+<div class="listingblock">
+<div class="content">
+<pre>(solution: QuadraticEquationSolving, discriminant: float = 0) -&gt; float</pre>
+</div>
+</div>
+</li>
+<li>
+<p><em>_find_second_solution</em> - поиск второго корня уравнения</p>
+<div class="listingblock">
+<div class="content">
+<pre>(solution: QuadraticEquationSolving, discriminant: float) -&gt; float</pre>
+</div>
+</div>
+</li>
+<li>
+<p><em>_find_solutions</em> - поиск корней уравнения</p>
+<div class="listingblock">
+<div class="content">
+<pre>(solution: QuadraticEquationSolving) -&gt; Optional[Union[float, Tuple]]</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="CoefficientValueError_link">Исключения <em>CoefficientValueError</em></h4>
+<div class="paragraph">
+<p>Наследуется от <em><strong>rest_framework.exceptions.ValidationError</strong></em></p>
+</div>
+<div class="paragraph">
+<p>Имеет поле <code><em>message</em></code> с возможностью добавления в формат переменных <code><em>coefficient_name</em></code> и <code><em>coefficient_value</em></code></p>
+</div>
+<div class="paragraph">
+<p>Для инициализации необходимы значения <code><em>coefficient_name</em></code> и <code><em>coefficient_value</em></code>.</p>
+</div>
+<div class="sect4">
+<h5 id="_coefficientemptyvalueerror"><em>CoefficientEmptyValueError</em></h5>
+<div class="paragraph">
+<p>наследуется от <em>CoefficientValueError</em></p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_coefficientzerovalueerror"><em>CoefficientZeroValueError</em></h5>
+<div class="paragraph">
+<p>наследуется от <em>CoefficientValueError</em></p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_coefficientwrongvalueerror"><em>CoefficientWrongValueError</em></h5>
+<div class="paragraph">
+<p>наследуется от <em>CoefficientValueError</em></p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_coefficientinfinityvalueerror"><em>CoefficientInfinityValueError</em></h5>
+<div class="paragraph">
+<p>наследуется от <em>CoefficientValueError</em></p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Coefficient_link">Именованный кортеж <em>Coefficient</em></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-python" data-lang="python">from collections import namedtuple
+
+Coefficient = namedtuple(
+    "Coefficient",
+    [
+        "a",
+        "b",
+        "c",
+    ],
+)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="QuadraticEquationSolvingView_link">Представление <em>Django</em> <em>QuadraticEquationSolvingView</em></h4>
+<div class="paragraph">
+<p>Поля:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Шаблон - <a href="#find_solutions_link"><em>find_solutions.html</em></a></p>
+</li>
+<li>
+<p>Форма - <a href="#QuadraticEquationSolvingForm_link"><em>QuadraticEquationSolvingForm</em></a></p>
+</li>
+<li>
+<p><em>initial</em> - <a href="#QuadraticEquationSolving_link"><em>QuadraticEquationSolving</em></a></p>
+</li>
+<li>
+<p><em>service</em> - <a href="#QuadraticEquationSolvingService_link"><em>QuadraticEquationSolvingService</em></a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Методы:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em>_get_linear_badge</em> - получить признак <code><em>linear</em></code></p>
+<div class="listingblock">
+<div class="content">
+<pre>() -&gt; bool</pre>
+</div>
+</div>
+</li>
+<li>
+<p><em>_get_non_solution_badge</em> - получить признак <code><em>non_solution</em></code></p>
+<div class="listingblock">
+<div class="content">
+<pre>() -&gt; bool</pre>
+</div>
+</div>
+</li>
+<li>
+<p><em>_get_one_solution_badge</em> - получить признак <code><em>one_solution</em></code></p>
+<div class="listingblock">
+<div class="content">
+<pre>() -&gt; bool</pre>
+</div>
+</div>
+</li>
+<li>
+<p><em>_get_two_solutions_badge</em> - получить признак <code><em>two_solutions</em></code></p>
+<div class="listingblock">
+<div class="content">
+<pre>() -&gt; bool</pre>
+</div>
+</div>
+</li>
+<li>
+<p><em>_fill_data</em> - заполните данные для отображаемого шаблона</p>
+<div class="listingblock">
+<div class="content">
+<pre>(request) -&gt; Dict</pre>
+</div>
+</div>
+</li>
+<li>
+<p><em>get</em> - обработчик <em>GET</em>-метода</p>
+<div class="listingblock">
+<div class="content">
+<pre>(request, *args, **kwargs)</pre>
+</div>
+</div>
+</li>
+<li>
+<p><em>post</em> - обработчик <em>POST</em>-метода</p>
+<div class="listingblock">
+<div class="content">
+<pre>(request, *args, **kwargs)</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="QuadraticEquationSolvingAPI_link">Набор представлений <em>Django</em> <em>REST</em> <em>Framework</em> <em>QuadraticEquationSolvingAPI</em></h4>
+<div class="paragraph">
+<p>Поля:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em>serializer_class</em> - <a href="#QuadraticEquationSolvingSerializer_link"><em>QuadraticEquationSolvingSerializer</em></a></p>
+</li>
+<li>
+<p><em>service_class</em> - <a href="#QuadraticEquationSolvingService_link"><em>QuadraticEquationSolvingService</em></a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Методы:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em>get_raw_coefficients_from_request</em> - получение необработанных данных о коэффициентах из запроса</p>
+</li>
+<li>
+<p><em>get</em> - обработчик <em>GET</em>-метода</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="QuadraticEquationSolvingSerializer_link">Сериализатор <em>QuadraticEquationSolvingSerializer</em></h4>
+<div class="paragraph">
+<p>Сериализатор: Решение квадратного уравнения</p>
+</div>
+<div class="paragraph">
+<p>Метод <em>is_valid</em>() проводит встроенную проверку сериализатора, а также проверки из сервиса <a href="#QuadraticEquationSolvingService_link"><em>QuadraticEquationSolvingService</em></a></p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Таблица 3. Поля сериализатора</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Название</th>
+<th class="tableblock halign-left valign-top">Тип</th>
+<th class="tableblock halign-left valign-top">Описание</th>
+<th class="tableblock halign-left valign-top">Свойства</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>a</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>FloatField</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Поле для коэффициента <code><em>a</em></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>required=False</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>b</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>FloatField</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Поле для коэффициента <code><em>b</em></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>required=False</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>c</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>FloatField</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Поле для коэффициента <code><em>c</em></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>required=False</em></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="QuadraticEquationSolvingForm_link">Форма <em>QuadraticEquationSolvingForm</em></h4>
+<div class="paragraph">
+<p>Форма: Решение квадратного уравнения</p>
+</div>
+<div class="paragraph">
+<p>Метод <em>is_valid()</em> проводит встроенную проверку формы, а также проверки из сервиса <a href="#QuadraticEquationSolvingService_link"><em>QuadraticEquationSolvingService</em></a></p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Таблица 4. Поля формы</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Название</th>
+<th class="tableblock halign-left valign-top">Тип</th>
+<th class="tableblock halign-left valign-top">Описание</th>
+<th class="tableblock halign-left valign-top">Свойства</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>a</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>FloatField</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Коэффициент '<em>a</em>'</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>label="",
+required=False,
+widget=forms.NumberInput(attrs={"placeholder": _("Coefficient '_a</em>'")}),_</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>b</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>FloatField</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Коэффициент '<em>b</em>'</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>label="",
+required=False,
+widget=forms.NumberInput(attrs={"placeholder": _("Coefficient '_b</em>'")}),_</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>c</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>FloatField</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Коэффициент '<em>c</em>'</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>label="",
+required=False,
+widget=forms.NumberInput(attrs={"placeholder": _("Coefficient '_c</em>'")}),_</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 3.0<br>
+Last updated 2022-06-09 17:55:23 +0300
+</div>
+</div>
+{% endblock %}

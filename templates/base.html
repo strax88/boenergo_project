@@ -1,0 +1,17 @@
+{% load i18n %}
+{% load static %}
+
+{% block header %}
+{% include "header.html" %}
+{% endblock %}
+
+<div class="main">
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+    <div class="menu">
+    {% include "menu.html" %}
+    </div>
+</div>
+{% include "footer.html" %}

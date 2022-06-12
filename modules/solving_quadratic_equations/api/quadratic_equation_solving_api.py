@@ -61,7 +61,7 @@ class QuadraticEquationSolvingView(views.generic.TemplateView):
             "c": None,
         }
         data = {
-            "header": _("Solving the quadratic equation"),
+            "title": _("Solving the quadratic equation"),
             "form": None,
             "linear": None,
             "discriminant": None,
@@ -148,6 +148,17 @@ class QuadraticEquationSolvingAPI(viewsets.ViewSet):
     @action(methods=["get"], detail=False)
     def get(self, request):
         _("""GET-method handler""")
+        raw_coefficients = self.get_raw_coefficients_from_request(request)
+        data = OrderedDict()
+        data.update(raw_coefficients)
+        discriminant, result = self.service_class.calc_equation(raw_coefficients)
+        data["discriminant"] = discriminant
+        data["result"] = result
+        return Response(data)
+
+    @action(methods=["post"], detail=False)
+    def post(self, request):
+        _("""POST-method handler""")
         raw_coefficients = self.get_raw_coefficients_from_request(request)
         data = OrderedDict()
         data.update(raw_coefficients)

@@ -6,10 +6,12 @@ from django.urls import path, include
 router = DefaultRouter()
 
 urlpatterns = [
-    path("", QuadraticEquationSolvingView.as_view(), name="index"),
+    path(
+        "", QuadraticEquationSolvingView.as_view(), name="solving_quadratic_equations"
+    ),
     path("", include(router.urls)),
     path(
         r"api/",
-        QuadraticEquationSolvingAPI.as_view({"get": "get"}),
+        QuadraticEquationSolvingAPI.as_view({"get": "get", "post": "post"}),
     ),
 ]
