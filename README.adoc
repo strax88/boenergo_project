@@ -1,0 +1,800 @@
+= BOENERGO PROJECT
+Kirill Strelkovskij <kstr88@mail.ru>
+3.0, July 9, 2022: AsciiDoc
+:toc:
+:toc-title: Оглавление
+:sectnums:
+:sectnumlevels: 2
+:icons: font
+:url-quickref:
+:experimental:
+:figure-caption: Рисунок
+:table-caption: Таблица
+:imagesdir: docs/images
+
+Проект содержит сервис для расчёта корней квадратного уравнения и сервис для угадывания цвета
+
+Проект реализован на link:https://docs.python.org/3.8/[_python-3.8_] с возможностью запуска в контейнере link:https://www.docker.com/[_Docker_].
+
+База данных проекта построена на link:https://www.sqlite.org/[_SQLite_].
+
+Сервисы разработаны без организации уровней доступа за исключением панели администратора.
+
+== Инсталляция
+
+Процесс инсталляции описан для _*nix_-системы в оболочке _bash_.
+
+=== Запуск _Django_
+
+IMPORTANT: Для запуска проекта средствами фреймворка необходимо наличие link:https://python.org[_python_] не ниже версии link:https://docs.python.org/3.8/[_3.8_]
+
+. Клонируйте проект на локальную машину:
++
+[source, bash]
+----
+$ git clone ...
+----
+. Перейдите в каталог с проектом:
++
+[source, bash]
+----
+$ cd boenergo_project
+----
+. Организуйте виртуальное окружение:
++
+[source, bash]
+----
+$ python3 -m venv .venv
+----
++
+[source, bash]
+----
+$ source .venv/bin/activate
+(.venv) $
+----
++
+TIP: Для выхода из виртуального окружения введите: `_deactivate_`
+. Установите зависимости:
++
+[source, bash]
+----
+(.venv) $pip install -r requirements.txt
+----
+. Добавьте переменные окружения:
++
+[source, bash]
+----
+(.venv) $echo "SECRET_KEY=RAnDoM_SeCrET_KeY_313_323_463
+DEBUG=True
+ALLOWED_HOSTS=127.0.0.1,localhost" >> .env
+----
+. Проведите миграции:
++
+[source, bash]
+----
+(.venv) $ python manage.py migrate
+----
++
+[#createsuperuser_basic]
+[IMPORTANT]
+.При необходимости создания учётной записи суперпользователя:
+====
+
+[source, bash]
+----
+(.venv) $ python manage.py createsuperuser
+Имя пользователя: {root} # введите имя пользователя
+Адрес электронной почты: # введите адрес электронной почты (можно пропустить)
+Password: # введите пароль (символы не отображаются)
+Password (again): # повторите пароль (символы не отображаются)
+----
+.Ошибки валидации пароля
+[source, bash]
+----
+Введённый пароль слишком короткий. Он должен содержать как минимум 8 символов.
+Введённый пароль слишком широко распространён.
+Введённый пароль состоит только из цифр.
+Bypass password validation and create user anyway? [y/N]: {y} # разрешить оставить простой пароль
+----
+.Сообщение об успешном выполнении команды
+[source, bash]
+----
+Superuser created successfully.
+----
+====
+. Запустите сервер:
++
+[source, bash]
+----
+(.venv) $ python manage.py runserver localhost:9000
+----
+
+После правильного выполнения всех шагов должен появиться вывод:
+
+[source, bash]
+----
+Watching for file changes with StatReloader
+Performing system checks...
+
+System check identified no issues (0 silenced).
+{MONTH} {DAY}, {DATE} - {TIME}
+Django version {DJANGO_VERSION}, using settings 'config.settings'
+Starting development server at http://localhost:9000/
+Quit the server with CONTROL-C.
+----
+
+Для проверки можно перейти в браузере на страницу _http://localhost:9000/admin_.
+Если отображается форма авторизации и получается войти под учётной записью xref:createsuperuser_basic[суперпользователя] - инсталляция завершена.
+
+=== Запуск контейнера _Docker_
+
+IMPORTANT: Для запуска контейнера потребуется установленное ПО link:https://www.docker.com/[_Docker_]
+
+. Клонируйте проект на локальную машину:
++
+[source, bash]
+----
+$ git clone ...
+----
+. Перейдите в каталог с проектом:
++
+[source, bash]
+----
+$ cd boenergo_project
+----
+[#createsuperuser_docker]
++
+[IMPORTANT]
+.При необходимости создания учётной записи суперпользователя:
+====
+[source, bash]
+----
+(.venv) $ ./commands/add_superuser.sh
+Имя пользователя: {root} # введите имя пользователя
+Адрес электронной почты: # введите адрес электронной почты (можно пропустить)
+Password: # введите пароль (символы не отображаются)
+Password (again): # повторите пароль (символы не отображаются)
+----
+.Ошибки валидации пароля
+[source, bash]
+----
+Введённый пароль слишком короткий. Он должен содержать как минимум 8 символов.
+Введённый пароль слишком широко распространён.
+Введённый пароль состоит только из цифр.
+Bypass password validation and create user anyway? [y/N]: {y} # разрешить оставить простой пароль
+----
+.Сообщение об успешном выполнении команды
+[source, bash]
+----
+Superuser created successfully.
+----
+====
+. Запустите сервер:
++
+* запуск в обычном режиме
++
+[source, bash]
+----
+$ docker-compose up -d
+----
+* запуск в фоновом режиме
++
+[source, bash]
+----
+$ docker-compose up -d
+----
+
+Для проверки можно перейти в браузере на страницу _http://localhost:9000/admin_.
+Если отображается форма авторизации и получается войти под учётной записью xref:createsuperuser_docker[суперпользователя] - инсталляция завершена.
+
+== Конфигурация
+
+=== Структура проекта
+
+----
+project_root
+├── config
+│   ├── settings
+│   ├── db.sqlite3
+│   └── urls.py
+├── docs
+├── locale
+├── modules
+│   ├── color_guessing_service
+│   └── solving_quadratic_equations
+├── manage.py
+├── README.adoc
+└── requirements.txt
+----
+
+* Каталог _config_ - содержит настройки проекта
+** _settings_ - общие настройки _settings_
+** _db.sqlite3_ - база данныйх _SQLite_
+** _urls.py_ - корень маршрутов _URL_
+* Каталог _docs_ - содержит дополнительные файлы документации
+* Каталог _locale_ - содержит перевод для локализации _en/ru_
+* Каталог modules - содержит приложения проекта
+** Каталог _color_guessing_service_ - приложение отгадывания цвета
+** Каталог _solving_quadratic_equations_ - приложение нахождения решений квадратных уравнений
+* _manage.py_ - менеджер _Django_
+* _README.adoc_ - данное руководство в формате _AsciiDoc_
+* _requirements.txt_ - список зависимостей проекта
+
+=== Настройки _settings_
+
+----
+├── settings
+│   ├── apps.py
+│   ├── auto_field.py
+│   ├── base.py
+│   ├── database.py
+│   ├── files.py
+│   ├── internationalization.py
+│   ├── middleware.py
+│   ├── password_validation.py
+│   ├── templates.py
+│   ├── url.py
+│   └── wsgi.py
+----
+
+* _apps_ - настройки приложений
+* _auto_field_ - настройка типа первичного ключа
+* _base_ - базовые настройки
+* _database_ - настройки базы данных
+* _files_ - настройки работы с файлами
+* _internationalization_ - настройки интернационализации
+* _middleware_ - настройки промежуточных обработчиков
+* _password_validation_ - настройки проверки паролей
+* _templates_ - настройки шаблонов
+* _url_ - настройки маршрутов
+* _wsgi_ - настройки _wsgi_
+
+== Модуль решение квадратных уравнений (_Solving Quadratic Equations_)
+
+Модуль позволяет найти решение квадратного уравнения на основе коэффициентов `_a_`, `_b_`, `_c_`.
+
+=== Структура
+
+----
+│└── solving_quadratic_equations
+│    ├── api
+│    │    ├── quadratic_equation_solving_api.py
+│    │    ├── forms
+│    │    │└── quadratic_equation_solving_form.py
+│    │    ├── serializers
+│    │    │└── quadratic_equation_solving_serializer.py
+│    │    └── views.py
+│    ├── enums
+│    │    └── coefficient_named_tuple.py
+│    ├── exceptions
+│    │    └── coefficient_value_error.py
+│    ├── migrations
+│    ├── services
+│    │    └── quadratic_equation_solving_service.py
+│    ├── templates
+│    │    └── find_solutions.html
+│    ├── tests
+│    │    ├── http-client.env.json
+│    │    ├── test_api.http
+│    │    └── tests.py
+│    ├── admin.py
+│    ├── apps.py
+│    ├── models.py
+│    └── urls.py
+
+----
+
+* _api_ - каталог с эндпоинтами
+** _serializers_ - каталог с сериализаторами
+*** _quadratic_equation_solving_serializer.py_ - сериализатор
+** _quadratic_equation_solving_api.py_ - _API_ и представление
+* _enums_ - перечни
+** _coefficient_named_tuple.py_ - _namedtuple_-перечень коэффициентов
+* _exceptions_ - кастомные исключения
+** _coefficient_value_error.py_ - исключения по значениям коэффициентов
+* _migrations_ - миграции базы данных
+* _services_ - службы / бизнес-логика
+** _quadratic_equation_solving_service.py_ - служба нахождения решения уравнения
+* _templates_ - каталог с шаблонами приложения
+** _find_solutions.html_ - шаблон для представления
+* _tests_ - тесты
+** _test_api.http_ - _HTTP_-запросы
+** _tests.py_ - тестирование
+* _admin.py_ - панель администратора
+* _apps.py_ - конфигурация модуля
+* _models.py_ - модели
+* _urls.py_ - маршруты
+
+=== Работа с модулем
+
+==== Работа через интерфейс
+
+Для работы через интерфейс необходимо перейти по адресу:
+
+****
+link:http://localhost:9000/solving_quadratic_equations/[]
+****
+
+Страница имеет следующий вид:
+
+image::img_1.png[Изображение, 600, title="Интерфейс пользователя"]
+
+Для нахождения решения необходимо заполнить поля коэффициентов и нажать btn:[Найти решение]
+
+Для сброса значений нажмите btn:[Сброс]
+
+При возникновении ошибки над btn:[Найти решение] появится информационное сообщение.
+
+При нахождении ответа в верхней части будут отображены результаты:
+
+image::img_2.png[Изображение, 600, title="Результаты нахождения решения"]
+
+При коэффициенте `_a_` = 0 будет произведён поиск решения линейного уравнения.
+
+TIP: При отсутствии коэффициентов `_a_` и `_b_` возникнет исключение, поскольку отсутствие данных коэффициентов предполагает отсутствие `x`.
+
+WARNING: В рамках данного проекта защита от часты запросов (_CAPTCHA_) не была предусмотрена.
+
+==== Использование _API_
+
+Сервис предполагает возможность поиска решения уравнения через _API_.
+
+TIP: Для упрощения вся обработка происходит через _GET_-запрос.
+
+Получить расчёт по _API_ можно двумя способами:
+
+* Передача параметров через адресную строку
++
+[source, http]
+----
+GET http://localhost:9000/solving_quadratic_equations/api/?a=1&b=2&c=1
+----
+* Передача параметров через тело запроса
++
+[source, http]
+----
+GET http://localhost:9000/solving_quadratic_equations/api/
+
+{
+    "a": 1,
+    "b": 2,
+    "c": 1
+}
+----
+
+Ответ на запрос ввозвращается в формате _JSON_:
+
+[source, JSON]
+----
+{
+  "a": 1.0,
+  "b": 2.0,
+  "c": 1.0,
+  "discriminant": 0.0,
+  "result": -1.0
+}
+----
+
+В случае возникновения ошибок с коэффициентами запрос вернёт 400 статус и текст ошибки:
+
+[source, http]
+----
+[
+  "Базовая ошибка значения коэффициента ('a', 'b'): (0.0, 0.0)"
+]
+
+Response code: 400 (Bad Request)
+----
+
+=== Принцип работы модуля
+
+Для демонстрации различных подходов в модуле были реализованы следующие механизмы:
+
+* Модель xref:QuadraticEquationSolving_link[] - данные о коэффициентах и найденных значениях
+* Панель администратора xref:QuadraticEquationSolvingAdmin_link[] - для работы с моделью
+* _HTTP_-запросы xref:test_api_link[] - для проверки работы с _API_
+* Шаблон xref:find_solutions_link[] - для создания интерфейса пользователя
+* Сервис xref:QuadraticEquationSolvingService_link[] - для валидации коэффициентов, отслеживания исключительных ситуаций, нахождения решений и сохранения данных в базу
+* Исключения xref:CoefficientValueError_link[]- для локализации исключений
+* Именованный кортеж xref:Coefficient_link[]- для работы с коэффициентами
+* Представление _Django_ xref:QuadraticEquationSolvingView_link[] -  для формирования интерфейса
+* Набор представлений _Django_ _REST_ _Framework_ xref:QuadraticEquationSolvingAPI_link[] - для работы _API_
+* Сериализатор xref:QuadraticEquationSolvingSerializer_link[] - для формирования API
+* Форма xref:QuadraticEquationSolvingForm_link[] - для формирования интерфейса пользователя
+
+Модель в данном сервисе используется в качестве *кэша* - при каждом новом запросе проверяется наличие уникальной связки ключей коэффициентов в модели, если объект модели существует - возвращается результат из модели, иначе возвращается результат расчёта. Данный результат также сохраняется в базе.
+
+Таким образом работа сервиса заключается ещё и в накоплении данных.
+
+=== Описание элементов
+
+[#QuadraticEquationSolving_link, reftext=_QuadraticEquationSolving_]
+==== Модель _QuadraticEquationSolving_
+
+Строковое значение - `\{a\} * x^2 + \{b\} * x + \{c\} = 0 (Discriminant: \{discriminant\}; X1: \{solution_1\}; X2: \{solution_2\})`
+
+Название модели - Решение квадратного уравнения (Решения квадратных уравнений)
+
+Композитный ключ - (`_a_`, `_b_`, `_c_`)
+
+Сортировка по умолчанию:
+
+. `_solution_1_`
+. `_solution_2_`
+
+.Поля модели _QuadraticEquationSolving_
+|===
+|Поле |Тип |Описание |Свойства
+
+|_a_
+|_FloatField_
+|Коэффициент '_a_'
+|_null=True_
+
+|_b_
+|_FloatField_
+|Коэффициент '_b_'
+|_null=True_
+
+|_c_
+|_FloatField_
+|Коэффициент '_c_'
+|_null=True_
+
+|_discriminant_
+|_FloatField_
+|Дискриминант
+|_null=True, default=None_
+
+|_solution_1_
+|_FloatField_
+|Первый корень уравнения `_X1_`
+|_null=True, default=None_
+
+|_solution_2_
+|_FloatField_
+|Второй корень уравнения `_X2_`
+|_null=True, default=None_
+|===
+
+
+[#QuadraticEquationSolvingAdmin_link, reftext=_QuadraticEquationSolvingAdmin_]
+==== Панель администратора _QuadraticEquationSolvingAdmin_
+
+Панель администратора для модели QuadraticEquationSolving
+
+Отображаемые значения:
+
+* `_a_`
+* `_b_`
+* `_c_`
+* `_discriminant_`
+* `_solution_1_`
+* `_solution_2_`
+
+[#test_api_link, reftext=_test_api.http_]
+==== _HTTP_-запросы _test_api.http_
+
+* Передача параметров через адресную строку
++
+[source, http]
+----
+GET http://localhost:9000/solving_quadratic_equations/api/?a=1&b=2&c=1
+----
+* Передача параметров через тело запроса
++
+[source, http]
+----
+GET http://localhost:9000/solving_quadratic_equations/api/
+
+{
+    "a": 1,
+    "b": 2,
+    "c": 1
+}
+----
+
+Ответ на запрос ввозвращается в формате _JSON_:
+
+[source, JSON]
+----
+{
+  "a": 1.0,
+  "b": 2.0,
+  "c": 1.0,
+  "discriminant": 0.0,
+  "result": -1.0
+}
+----
+
+В случае возникновения ошибок с коэффициентами запрос вернёт 400 статус и текст ошибки:
+
+[source, http]
+----
+[
+  "Базовая ошибка значения коэффициента ('a', 'b'): (0.0, 0.0)"
+]
+
+Response code: 400 (Bad Request)
+----
+
+[#find_solutions_link, reftext=_find_solutions.html_]
+==== Шаблон _find_solutions.html_
+
+Стандартный _HTML_-документ с применением _CSS_-стилей.
+
+.Переменные шаблона
+|===
+|Название |Тип |Описание
+
+|_header_
+|_str_
+|Заголовок страницы
+
+|_form_
+|_django.forms_
+|Форма для ввода коэффициентов
+
+|_linear_
+|_bool_
+|Флаг для отображения результатов по расчёту линейного уравнения (линейное уравнение - отсутствует дискриминант, коэффициент `_a_`, второй корень, присутствует первый корень)
+
+|_discriminant_
+|_float_
+|Дискриминант
+
+|_non_solution_
+|_bool_
+|Флаг отражающий отсутствие результата (отсутствует первый корень, второй корень, присутствует дискриминант)
+
+|_one_solution_
+|_bool_
+|Флаг отражающий одно решение (отсутствует второй корень, присутствует дискриминант, первый корень)
+
+|_two_solutions_
+|_bool_
+|Флаг отражающий два решения (присутствует первый корень, второй корень)
+
+|_solution_1_
+|_float_
+|Первый корень
+
+|_solution_2_
+|_float_
+|Второй корень
+
+|_error_message_
+|_str_
+|Сообщение об ошибке
+|===
+
+
+[#QuadraticEquationSolvingService_link, reftext=_QuadraticEquationSolvingService_]
+==== Сервис _QuadraticEquationSolvingService_
+
+Служба: Решение квадратного уравнения
+
+Методы:
+
+* _calc_equation_ - решение уравнения
++
+----
+(raw_coefficients: Dict) -> Tuple[float, Union[Tuple, float, None]]
+----
+* _float_formatting_coefficient_ - преобразование коэффициентов к вещественным числам и упаковка в _namedtuple_
++
+----
+(a: str, b: str, c: str) -> Coefficient
+----
+* _get_or_create_solving_ - выборка данных из базы или добавление данных в базу
++
+----
+(cleaned_coefficient: Coefficient) -> QuadraticEquationSolving
+----
+* _validate_coefficient_
++
+****
+Валидация данных
+
+* коэффициенты `_a_` и `_b_` присутствуют и не равны нулю;
+* коэффициенты не равны бесконечности;
+* коэффициенты являются вещественными числами;
+****
++
+----
+(raw_coefficients: Dict) -> None
+----
+* __calc_linear_equation_ - решение линейного уравнения
++
+----
+(solution: QuadraticEquationSolving) -> float
+----
+* __checking_real_number_ - проверка значения на принадлежность к вещественным числам (за исключением бесконечностей)
++
+----
+(value: Any) -> bool
+----
+* __find_discriminant_ - поиск дискриминанта
++
+----
+(solution: QuadraticEquationSolving) -> float
+----
+* __find_first_solution_ - поиск первого корня уравнения
++
+----
+(solution: QuadraticEquationSolving, discriminant: float = 0) -> float
+----
+* __find_second_solution_ - поиск второго корня уравнения
++
+----
+(solution: QuadraticEquationSolving, discriminant: float) -> float
+----
+* __find_solutions_ - поиск корней уравнения
++
+----
+(solution: QuadraticEquationSolving) -> Optional[Union[float, Tuple]]
+----
+
+[#CoefficientValueError_link, reftext=_CoefficientValueError_]
+==== Исключения _CoefficientValueError_
+
+Наследуется от _**rest_framework.exceptions.ValidationError**_
+
+Имеет поле `_message_` с возможностью добавления в формат переменных `_coefficient_name_` и `_coefficient_value_`
+
+Для инициализации необходимы значения `_coefficient_name_` и `_coefficient_value_`.
+
+===== _CoefficientEmptyValueError_
+
+наследуется от _CoefficientValueError_
+
+===== _CoefficientZeroValueError_
+
+наследуется от _CoefficientValueError_
+
+===== _CoefficientWrongValueError_
+
+наследуется от _CoefficientValueError_
+
+===== _CoefficientInfinityValueError_
+
+наследуется от _CoefficientValueError_
+
+[#Coefficient_link, reftext=_Coefficient_]
+==== Именованный кортеж _Coefficient_
+
+[source, python]
+----
+from collections import namedtuple
+
+Coefficient = namedtuple(
+    "Coefficient",
+    [
+        "a",
+        "b",
+        "c",
+    ],
+)
+----
+
+[#QuadraticEquationSolvingView_link, reftext=_QuadraticEquationSolvingView_]
+==== Представление _Django_ _QuadraticEquationSolvingView_
+
+Поля:
+
+* Шаблон - xref:find_solutions_link[]
+* Форма - xref:QuadraticEquationSolvingForm_link[]
+* _initial_ - xref:QuadraticEquationSolving_link[]
+* _service_ - xref:QuadraticEquationSolvingService_link[]
+
+Методы:
+
+* __get_linear_badge_ - получить признак `_linear_`
++
+----
+() -> bool
+----
+* __get_non_solution_badge_ - получить признак `_non_solution_`
++
+----
+() -> bool
+----
+* __get_one_solution_badge_ - получить признак `_one_solution_`
++
+----
+() -> bool
+----
+* __get_two_solutions_badge_ - получить признак `_two_solutions_`
++
+----
+() -> bool
+----
+* __fill_data_ - заполните данные для отображаемого шаблона
++
+----
+(request) -> Dict
+----
+* _get_ - обработчик _GET_-метода
++
+----
+(request, *args, **kwargs)
+----
+* _post_ - обработчик _POST_-метода
++
+----
+(request, *args, **kwargs)
+----
+
+[#QuadraticEquationSolvingAPI_link, reftext=_QuadraticEquationSolvingAPI_]
+==== Набор представлений _Django_ _REST_ _Framework_ _QuadraticEquationSolvingAPI_
+
+Поля:
+
+* _serializer_class_ - xref:QuadraticEquationSolvingSerializer_link[]
+* _service_class_ - xref:QuadraticEquationSolvingService_link[]
+
+Методы:
+
+* _get_raw_coefficients_from_request_ - получение необработанных данных о коэффициентах из запроса
+* _get_ - обработчик _GET_-метода
+
+[#QuadraticEquationSolvingSerializer_link, reftext=_QuadraticEquationSolvingSerializer_]
+==== Сериализатор _QuadraticEquationSolvingSerializer_
+
+Сериализатор: Решение квадратного уравнения
+
+Метод _is_valid_() проводит встроенную проверку сериализатора, а также проверки из сервиса xref:QuadraticEquationSolvingService_link[]
+
+.Поля сериализатора
+|===
+|Название |Тип |Описание |Свойства
+
+|_a_
+|_FloatField_
+|Поле для коэффициента `_a_`
+|_required=False_
+
+|_b_
+|_FloatField_
+|Поле для коэффициента `_b_`
+|_required=False_
+
+|_c_
+|_FloatField_
+|Поле для коэффициента `_c_`
+|_required=False_
+|===
+
+[#QuadraticEquationSolvingForm_link, reftext=_QuadraticEquationSolvingForm_]
+==== Форма _QuadraticEquationSolvingForm_
+
+Форма: Решение квадратного уравнения
+
+Метод _is_valid()_ проводит встроенную проверку формы, а также проверки из сервиса xref:QuadraticEquationSolvingService_link[]
+
+.Поля формы
+|===
+|Название |Тип |Описание |Свойства
+
+|_a_
+|_FloatField_
+|Коэффициент '_a_'
+|_label="",
+required=False,
+widget=forms.NumberInput(attrs={"placeholder": _("Coefficient '_a_'")}),_
+
+|_b_
+|_FloatField_
+|Коэффициент '_b_'
+|_label="",
+required=False,
+widget=forms.NumberInput(attrs={"placeholder": _("Coefficient '_b_'")}),_
+
+|_c_
+|_FloatField_
+|Коэффициент '_c_'
+|_label="",
+required=False,
+widget=forms.NumberInput(attrs={"placeholder": _("Coefficient '_c_'")}),_
+|===
+

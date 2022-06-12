@@ -1,0 +1,1 @@
+default_app_config = "modules.solving_quadratic_equations.apps.SolvingQuadraticEquationsConfig"

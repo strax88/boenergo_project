@@ -1,0 +1,10 @@
+### Передача параметров через адресную строку
+GET http://{{host}}{{port}}/solving_quadratic_equations/api/?a=1&b=2&c=1
+
+### Передача параметров через тело запроса
+GET http://{{host}}{{port}}/solving_quadratic_equations/api/
+
+{
+    "b": 0,
+    "c": 1
+}

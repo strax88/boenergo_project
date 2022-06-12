@@ -1,0 +1,225 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>{{header}}</title>
+</head>
+<style>
+html {
+	font-family: Verdana, "sans-serif";
+	font-size: 16px;
+}
+body {
+	min-height: 100vh;
+	background: linear-gradient(#f9de59, #f98365) no-repeat;
+}
+.main {
+	margin: 0 auto;
+	width: 40%;
+	background-color: rgba(210, 105, 30, 0.19);
+}
+h1 {
+	text-align: center;
+	color: white;
+	text-shadow: 0 2px 5px rgba(150, 150, 150, 0.8);
+}
+#about_linear {
+	background-color: rgba(140, 203, 94, 0.24);
+	padding-left: 5px;
+	width: 80%;
+	margin: 0 auto;
+}
+
+form {
+	width: 100%;
+	margin-bottom: 20px;
+}
+
+input[type=submit], input[type=reset] {
+	text-align: center;
+	margin-top: 10px;
+	background-color: white;
+	cursor: pointer;
+}
+
+input[type=number], input[type=submit], input[type=reset] {
+	box-sizing: border-box;
+	width: 100%;
+	font-size: 16px;
+	outline: none;
+	border: none;
+	padding: 20px;
+	border-radius: 5px;
+	-webkit-transition: 0.3s;
+	-moz-transition: 0.3s;
+	transition: 0.3s;
+	-webkit-box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.1);
+	-moz-box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.1);
+	box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.1);
+}
+
+input[type=number]:focus, input[type=submit]:hover, input[type=reset]:hover {
+	-webkit-transition: 0.3s;
+	-moz-transition: 0.3s;
+	transition: 0.3s;
+	-webkit-box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.5);
+	-moz-box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.5);
+	box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.5);
+}
+.formula {
+	padding: 10px;
+	font-size: 18px;
+	font-style: italic;
+	font-weight: bold;
+}
+.division_sign {
+	border-bottom: 4px solid black;
+}
+.linear {
+	font-weight: bold;
+	color: #01061a;
+	text-shadow: 0 2px 5px rgba(74, 204, 31, 0.4);
+}
+.non_solution {
+	font-weight: bold;
+	color: #01061a;
+	text-shadow: 0 2px 5px rgba(74, 204, 31, 0.4);
+
+}
+.one_solution {
+	font-weight: bold;
+	color: #01061a;
+	text-shadow: 0 2px 5px rgba(74, 204, 31, 0.4);
+
+}
+.two_solutions {
+	font-weight: bold;
+	color: #01061a;
+	text-shadow: 0 2px 5px rgba(74, 204, 31, 0.4);
+
+}
+#discriminant {
+	font-weight: bold;
+	color: #01061a;
+	text-shadow: 0 2px 5px rgba(74, 204, 31, 0.4);
+
+}
+.error_message {
+	font-weight: bold;
+	color: rgba(255, 255, 255, 1);
+	text-shadow: 0 2px 5px rgb(255, 9, 0);
+
+}
+
+</style>
+<body>
+<h1>{{header}}</h1>
+<div class="main">
+	{% trans "General view of the quadratic equation" %}:
+	<div class="formula">ax&sup2; + bx + c = 0 </div>
+
+<div id="about_linear">
+	{% trans "By" %} <span class="formula">a = 0</span>
+	<span{% if linear %} class="linear"{% endif %}>{% trans "the equation becomes linear" %}</span>:
+	<div class="formula">bx + c = 0</div>
+	<span{% if linear %} class="linear"{% endif %}>{% trans "and is calculated by the formula" %}</span>:
+<table class="formula">
+	<tbody>
+		<tr>
+			<td>&nbsp;</td>
+			<td rowspan="2">x</td>
+			<td rowspan="2">=</td>
+			<td rowspan="2">-</td>
+			<td rowspan="2"></td>
+			<td class="division_sign">c</td>
+			<td rowspan="2"></td>
+			{% if linear %}
+			<td rowspan="2"> = </td>
+			<td class="linear" rowspan="2">{{ solution_1}}</td>
+			{% endif %}
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td>b</td>
+		</tr>
+	</tbody>
+</table>
+</div>
+{% trans "To find the roots of the equation , it is necessary to find the discriminant" %}:
+	<div class="formula">
+		D = b&sup2; - 4 &middot; a &middot; c
+		{% if discriminant != None %}
+		<span id="discriminant"> = {{discriminant}}</span>
+		{% endif %}
+	</div>
+<div>
+	{% trans "If" %} <span class="formula">D  &lt; 0</span> -
+	<span{% if non_solution %} class="non_solution"{% endif %}>{% trans "the equation has no roots" %}</span>.
+</div>
+<div>
+	{% trans "If" %} <span class="formula">D = 0</span> -
+	<span{% if one_solution %} class="one_solution"{% endif %}>{% trans "the equation has one root" %}</span>:
+</div>
+<table class="formula">
+	<tbody>
+		<tr>
+			<td>&nbsp;</td>
+			<td rowspan="2">x</td>
+			<td rowspan="2">=</td>
+			<td rowspan="2">-</td>
+			<td rowspan="2"></td>
+			<td style="text-align: center;" class="division_sign">b</td>
+			<td rowspan="2"></td>
+			{% if one_solution %}
+			<td rowspan="2"> = </td>
+			<td class="one_solution" rowspan="2">{{ solution_1}}</td>
+			{% endif %}
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td style="text-align: center;" >2 &middot; a</td>
+		</tr>
+	</tbody>
+</table>
+<div>
+	{% trans "If" %} <span class="formula">D  &gt; 0</span> -
+	<span{% if two_solutions %} class="two_solutions"{% endif %}>{% trans "the equation has two roots" %}</span>:
+</div>
+<table class="formula">
+	<tbody>
+		<tr>
+			<td>&nbsp;</td>
+			<td rowspan="2">x</td>
+			<td rowspan="2">=</td>
+			<td rowspan="2">-</td>
+			<td rowspan="2"></td>
+			<td style="text-align: center;" class="division_sign">b &plusmn; &radic; D</td>
+			<td rowspan="2"></td>
+			{% if two_solutions %}
+			<td rowspan="2"> = </td>
+			<td class="two_solutions" rowspan="2">{{ solution_1}}; </td>
+			<td class="two_solutions" rowspan="2">{{ solution_2}}</td>
+			{% endif %}
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td style="text-align: center;" >2 &middot; a</td>
+		</tr>
+	</tbody>
+</table>
+
+
+
+<form action="" method="post">
+{% csrf_token %}
+{{ form.as_p }}
+	<label for="submit_button" class="error_message">{% if error_message %} {% trans error_message %} {% endif %}</label>
+	<input id="submit_button" type="submit" value="{% trans "Find a solution" %}">
+	<input type="reset" value="{% trans "Reset" %}">
+</form>
+</div>
+
+</body>
+
+</html>
