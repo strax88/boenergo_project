@@ -1,14 +1,12 @@
 import os
 
-from config.settings import BASE_DIR
+from config.settings import BASE_DIR, PROJECT_ROOT
 
 TEMPLATES_DIR = os.path.join(BASE_DIR, "modules")
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [
-            TEMPLATES_DIR,
-        ],
+        "DIRS": [TEMPLATES_DIR, os.path.join(PROJECT_ROOT, "templates/")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

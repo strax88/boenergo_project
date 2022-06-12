@@ -1,0 +1,10 @@
+{% load i18n %}
+{% load static %}
+<nav class="navigate-bar">
+    <a class="menu-link" href="{% url 'index' %}">{% trans "Index page" %}</a>
+    <a class="menu-link" href="{% url 'docs' %}">{% trans "Project documents" %}</a>
+    <ul class="submenu-items">
+        <li class="submenu-element"><a class="menu-link" href="{% url 'solving_quadratic_equations' %}">{% trans "Solving the quadratic equation" %}</a></li>
+        <li class="submenu-element"><a class="menu-link" href="{% url 'solving_quadratic_equations' %}api">{% trans "Solving the quadratic equation" %}: API</a></li>
+    </ul>
+</nav>

@@ -5,10 +5,10 @@
 #
 #, fuzzy
 msgid ""
-    msgstr ""
+msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-09 17:35+0300\n"
+"POT-Creation-Date: 2022-06-12 18:38+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,6 +19,18 @@ msgid ""
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
 "%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#: modules/color_guessing_service/apps.py:8
+msgid "Module for color guessing"
+msgstr "Модуль отгадывания цвета"
+
+#: modules/default_views.py:16 templates/menu.html:4
+msgid "Index page"
+msgstr "Главная"
+
+#: modules/default_views.py:31 templates/menu.html:5
+msgid "Project documents"
+msgstr "Документация"
 
 #: modules/solving_quadratic_equations/admin.py:10
 msgid "Admin panel for the QuadraticEquationSolving model"
@@ -69,7 +81,8 @@ msgid "Fill data for rendered template"
 msgstr "Заполните данные для отображаемого шаблона"
 
 #: modules/solving_quadratic_equations/api/quadratic_equation_solving_api.py:64
-#: modules/solving_quadratic_equations/models.py:58
+#: modules/solving_quadratic_equations/models.py:58 templates/menu.html:7
+#: templates/menu.html:8
 msgid "Solving the quadratic equation"
 msgstr "Решение квадратного уравнения"
 
@@ -79,6 +92,7 @@ msgid "GET-method handler"
 msgstr "Обработчик GET-метода"
 
 #: modules/solving_quadratic_equations/api/quadratic_equation_solving_api.py:112
+#: modules/solving_quadratic_equations/api/quadratic_equation_solving_api.py:161
 msgid "POST-method handler"
 msgstr "Обработчик POST-метода"
 
@@ -223,49 +237,49 @@ msgstr "Поиск второго корня уравнения"
 msgid "Finding the solutions of the equation"
 msgstr "Поиск корней уравнения"
 
-#: modules/solving_quadratic_equations/templates/find_solutions.html:119
+#: modules/solving_quadratic_equations/templates/find_solutions.html:4
 msgid "General view of the quadratic equation"
 msgstr "Общий вид квадратного уравнения"
 
-#: modules/solving_quadratic_equations/templates/find_solutions.html:123
+#: modules/solving_quadratic_equations/templates/find_solutions.html:7
 msgid "By"
 msgstr "При"
 
-#: modules/solving_quadratic_equations/templates/find_solutions.html:124
+#: modules/solving_quadratic_equations/templates/find_solutions.html:8
 msgid "the equation becomes linear"
 msgstr "уравнение становится линейным"
 
-#: modules/solving_quadratic_equations/templates/find_solutions.html:126
+#: modules/solving_quadratic_equations/templates/find_solutions.html:10
 msgid "and is calculated by the formula"
 msgstr "и вычисляется по формуле"
 
-#: modules/solving_quadratic_equations/templates/find_solutions.html:149
+#: modules/solving_quadratic_equations/templates/find_solutions.html:33
 msgid ""
 "To find the roots of the equation , it is necessary to find the discriminant"
 msgstr "Для нахождения корней уравнения необходимо найти дискриминант"
 
-#: modules/solving_quadratic_equations/templates/find_solutions.html:157
-#: modules/solving_quadratic_equations/templates/find_solutions.html:161
-#: modules/solving_quadratic_equations/templates/find_solutions.html:186
+#: modules/solving_quadratic_equations/templates/find_solutions.html:41
+#: modules/solving_quadratic_equations/templates/find_solutions.html:45
+#: modules/solving_quadratic_equations/templates/find_solutions.html:70
 msgid "If"
 msgstr "Если"
 
-#: modules/solving_quadratic_equations/templates/find_solutions.html:158
+#: modules/solving_quadratic_equations/templates/find_solutions.html:42
 msgid "the equation has no roots"
 msgstr "уравнение не имеет корней"
 
-#: modules/solving_quadratic_equations/templates/find_solutions.html:162
+#: modules/solving_quadratic_equations/templates/find_solutions.html:46
 msgid "the equation has one root"
 msgstr "уравнение имеет один корень"
 
-#: modules/solving_quadratic_equations/templates/find_solutions.html:187
+#: modules/solving_quadratic_equations/templates/find_solutions.html:71
 msgid "the equation has two roots"
 msgstr "уравнение имеет два корня"
 
-#: modules/solving_quadratic_equations/templates/find_solutions.html:218
+#: modules/solving_quadratic_equations/templates/find_solutions.html:102
 msgid "Find a solution"
 msgstr "Найти решение"
 
-#: modules/solving_quadratic_equations/templates/find_solutions.html:219
+#: modules/solving_quadratic_equations/templates/find_solutions.html:103
 msgid "Reset"
 msgstr "Сброс"

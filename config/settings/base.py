@@ -15,6 +15,6 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY", None)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", False)
+DEBUG = os.getenv("DEBUG", False) in [True, "True", "1", 1]
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
